@@ -1,0 +1,9 @@
+apiVersion: longhorn.io/v1beta2
+kind: BackupTarget
+metadata:
+  name: default
+  namespace: longhorn-system
+spec:
+  backupTargetURL: "nfs://192.168.68.101:/srv/nfs/k8s-backups"
+  credentialSecret: ""
+  pollInterval: "300s"

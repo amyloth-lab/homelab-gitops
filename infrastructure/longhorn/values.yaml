@@ -1,0 +1,22 @@
+defaultSettings:
+  defaultDataPath: "/var/lib/longhorn"
+  createDefaultDiskLabeledNodes: true
+  defaultReplicaCount: 3
+  backupTarget: "nfs://192.168.68.101:/srv/nfs/k8s-backups"
+  storageOverProvisioningPercentage: 100
+  storageMinimalAvailablePercentage: 15
+  replicaAutoBalance: "best-effort"
+
+persistence:
+  defaultClass: true
+  defaultClassReplicaCount: 3
+  reclaimPolicy: Retain
+
+csi:
+  attacherReplicaCount: 2
+  provisionerReplicaCount: 2
+  resizerReplicaCount: 2
+  snapshotterReplicaCount: 2
+
+longhornUI:
+  replicas: 1
