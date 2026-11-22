@@ -1,0 +1,17 @@
+global:
+  domain: argocd.mylothlab.com
+
+configs:
+  params:
+    server.insecure: true
+
+server:
+  replicas: 2
+  service:
+    type: ClusterIP
+
+repoServer:
+  replicas: 2
+
+applicationSet:
+  replicas: 2
