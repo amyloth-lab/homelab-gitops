@@ -1,0 +1,15 @@
+controller:
+  replicaCount: 2
+  ingressClassResource:
+    name: nginx
+    enabled: true
+    default: true
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    annotations:
+      io.cilium/lb-ipam-ips: "192.168.68.151"
+  metrics:
+    enabled: true
+  admissionWebhooks:
+    enabled: true
