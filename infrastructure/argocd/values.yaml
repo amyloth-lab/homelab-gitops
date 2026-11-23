@@ -4,6 +4,8 @@ global:
 configs:
   params:
     server.insecure: true
+  cm:
+    kustomize.buildOptions: "--enable-alpha-plugins --enable-exec"
 
 server:
   replicas: 2
@@ -12,6 +14,39 @@ server:
 
 repoServer:
   replicas: 2
+  env:
+    - name: XDG_CONFIG_HOME
+      value: /.config
+    - name: SOPS_AGE_KEY_FILE
+      value: /.config/sops/age/keys.txt
+  volumes:
+    - name: custom-tools
+      emptyDir: {}
+    - name: sops-age
+      secret:
+        secretName: sops-age
+  initContainers:
+    - name: install-ksops
+      image: alpine:3.24.4
+      imagePullPolicy: IfNotPresent
+      command:
+       - /bin/sh
+       - -c
+      args:
+        - |
+          wget -qO- https://github.com/viaduct-ai/kustomize-sops/releases/download/v4.5.1/ksops_4.5.1_Linux_x86_64.tar.gz \
+          | tar -xz -C /custom-tools ksops
+          chmod +x /custom-tools/ksops
+      volumeMounts:
+        - mountPath: /custom-tools
+          name: custom-tools
+  volumeMounts:
+    - mountPath: /usr/local/bin/ksops
+      name: custom-tools
+      subPath: ksops
+    - mountPath: /.config/sops/age
+      name: sops-age
+      readOnly: true
 
 applicationSet:
   replicas: 2
