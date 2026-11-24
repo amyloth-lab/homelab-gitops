@@ -67,7 +67,7 @@ grafana:
 prometheus:
   prometheusSpec:
     serviceMonitorSelectorNilUsesHelmValues: false
-    replicas: 2
+    replicas: 1
     retention: 15d
     retentionSize: "4GB"
     storageSpec:
