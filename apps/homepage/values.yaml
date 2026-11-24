@@ -1,0 +1,61 @@
+httpRoute:
+  enabled: true
+  parentRefs:
+    - name: gateway # Replace with your actual Gateway name
+      namespace: gateway-system # Replace with your Gateway's namespace
+      sectionName: https
+  hostnames:
+    - core.mylothlab.com
+
+kubernetes:
+  enabled: true
+
+config:
+  kubernetes:
+    mode: cluster
+    gateway: true # Enables HTTPRoute auto-discovery
+    ingress: false
+
+  settings:
+    title: Myloth Homelab
+    theme: dark
+    color: slate
+    headerStyle: clean
+
+  widgets:
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: "cluster"
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+
+  services:
+    - Infrastructure:
+        - ArgoCD:
+            icon: argocd.png
+            href: https://argocd.mylothlab.com
+            description: GitOps Continuous Delivery
+        - Longhorn:
+            icon: longhorn.png
+            href: https://longhorn.mylothlab.com
+            description: Distributed Block Storage
+    - Observability:
+        - Grafana:
+            icon: grafana.png
+            href: https://grafana.mylothlab.com
+            description: Dashboards & Logs
+        - Prometheus:
+            icon: prometheus.png
+            href: https://prometheus.mylothlab.com
+            description: Metrics & Targets
+        - Alertmanager:
+            icon: prometheus.png
+            href: https://alertmanager.mylothlab.com
+            description: Alert Routing
