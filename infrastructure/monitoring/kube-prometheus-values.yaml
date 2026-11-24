@@ -37,6 +37,10 @@ alertmanager:
         memory: 256Mi
 
 grafana:
+  livenessProbe:
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    failureThreshold: 10
   replicas: 1
   admin:
     existingSecret: grafana-admin-credentials
