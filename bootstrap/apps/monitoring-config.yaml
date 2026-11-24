@@ -6,6 +6,13 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
+  ignoreDifferences:
+    - group: ""
+      kind: Secret
+      name: grafana-admin-credentials
+      namespace: monitoring
+      jsonPointers:
+        - /data
   project: default
   source:
     repoURL: git@github.com:amyloth-lab/homelab-gitops.git
