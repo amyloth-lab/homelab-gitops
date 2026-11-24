@@ -8,7 +8,7 @@ metadata:
 spec:
   project: default
   sources:
-    - repoURL: ghcr.io/this-is-tobi/helm-charts
+    - repoURL: ghcr.io/this-is-tobi/charts
       chart: homepage
       targetRevision: 0.3.0
       helm:
