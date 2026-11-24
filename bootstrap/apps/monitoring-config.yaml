@@ -19,7 +19,7 @@ spec:
     targetRevision: main
     path: infrastructure/monitoring
     directory:
-      include: '{httproutes.yaml,grafana-secret.enc.yaml}'
+      include: 'httproutes.yaml'
   destination:
     server: https://kubernetes.default.svc
     namespace: monitoring
