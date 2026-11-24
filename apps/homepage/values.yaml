@@ -1,8 +1,8 @@
 httpRoute:
   enabled: true
   parentRefs:
-    - name: gateway # Replace with your actual Gateway name
-      namespace: gateway-system # Replace with your Gateway's namespace
+    - name: homelab-gateway # Replace with your actual Gateway name
+      namespace: kube-system # Replace with your Gateway's namespace
       sectionName: https
   hostnames:
     - core.mylothlab.com
