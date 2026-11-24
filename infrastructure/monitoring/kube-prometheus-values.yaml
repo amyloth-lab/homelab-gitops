@@ -64,7 +64,7 @@ prometheus:
   prometheusSpec:
     replicas: 1
     retention: 15d
-    retentionSize: "13GB"
+    retentionSize: "4GB"
     storageSpec:
       volumeClaimTemplate:
         spec:
@@ -72,7 +72,7 @@ prometheus:
           accessModes: ["ReadWriteOnce"]
           resources:
             requests:
-              storage: 15Gi
+              storage: 5Gi
     resources:
       requests:
         cpu: 200m
