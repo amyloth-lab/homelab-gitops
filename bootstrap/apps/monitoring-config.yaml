@@ -13,7 +13,7 @@ spec:
       namespace: monitoring
       jsonPointers:
         - /data
-  project: default
+  project: infrastructure
   source:
     repoURL: git@github.com:amyloth-lab/homelab-gitops.git
     targetRevision: main

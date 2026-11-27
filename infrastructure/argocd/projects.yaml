@@ -1,0 +1,111 @@
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: infrastructure
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Core cluster infrastructure, CNI, storage, certificates, and observability
+  sourceRepos:
+    - 'git@github.com:amyloth-lab/homelab-gitops.git'
+    - 'https://grafana.github.io/helm-charts'
+    - 'https://grafana-community.github.io/helm-charts'
+    - 'https://prometheus-community.github.io/helm-charts'
+  destinations:
+    - namespace: argocd
+      server: https://kubernetes.default.svc
+    - namespace: cert-manager
+      server: https://kubernetes.default.svc
+    - namespace: kube-system
+      server: https://kubernetes.default.svc
+    - namespace: longhorn-system
+      server: https://kubernetes.default.svc
+    - namespace: monitoring
+      server: https://kubernetes.default.svc
+  clusterResourceWhitelist:
+    - group: '*'
+      kind: '*'
+  namespaceResourceWhitelist:
+    - group: '*'
+      kind: '*'
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: platform
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: Shared platform guardrails, CI agent namespaces, quotas, and network policies
+  sourceRepos:
+    - 'git@github.com:amyloth-lab/homelab-gitops.git'
+  destinations:
+    - namespace: ci-agents
+      server: https://kubernetes.default.svc
+    - namespace: terenga-dev
+      server: https://kubernetes.default.svc
+    - namespace: terenga-staging
+      server: https://kubernetes.default.svc
+    - namespace: terenga-prod
+      server: https://kubernetes.default.svc
+  # Allow creating Namespaces and ClusterRoles ONLY via platform governance, no CRDs/Webhooks
+  clusterResourceWhitelist:
+    - group: ''
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: ''
+      kind: ResourceQuota
+    - group: ''
+      kind: LimitRange
+    - group: ''
+      kind: ServiceAccount
+    - group: ''
+      kind: ConfigMap
+    - group: 'rbac.authorization.k8s.io'
+      kind: Role
+    - group: 'rbac.authorization.k8s.io'
+      kind: RoleBinding
+    - group: 'networking.k8s.io'
+      kind: NetworkPolicy
+    - group: 'cilium.io'
+      kind: CiliumNetworkPolicy
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: applications
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  description: End-user and business applications with strict zero-cluster-privilege boundaries
+  sourceRepos:
+    - 'git@github.com:amyloth-lab/homelab-gitops.git'
+    - 'ghcr.io/this-is-tobi/charts'
+  destinations:
+    - namespace: homepage
+      server: https://kubernetes.default.svc
+    - namespace: terenga-dev
+      server: https://kubernetes.default.svc
+    - namespace: terenga-staging
+      server: https://kubernetes.default.svc
+    - namespace: terenga-prod
+      server: https://kubernetes.default.svc
+  # Explicitly deny all cluster-scoped resources
+  clusterResourceWhitelist: []
+  # Explicitly block apps from altering their own network policies, quotas, or RBAC
+  namespaceResourceBlacklist:
+    - group: ''
+      kind: ResourceQuota
+    - group: ''
+      kind: LimitRange
+    - group: 'rbac.authorization.k8s.io'
+      kind: Role
+    - group: 'rbac.authorization.k8s.io'
+      kind: RoleBinding
+    - group: 'networking.k8s.io'
+      kind: NetworkPolicy
+    - group: 'cilium.io'
+      kind: CiliumNetworkPolicy

@@ -4,7 +4,7 @@ metadata:
   name: cert-manager-config
   namespace: argocd
 spec:
-  project: default
+  project: infrastructure
   source:
     repoURL: "git@github.com:amyloth-lab/homelab-gitops.git"
     targetRevision: main
