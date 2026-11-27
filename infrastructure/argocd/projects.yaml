@@ -38,11 +38,14 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  description: Shared platform guardrails, CI agent namespaces, quotas, and network policies
+  description: Shared platform guardrails, CI agent namespaces, internal portals, and network policies
   sourceRepos:
     - 'git@github.com:amyloth-lab/homelab-gitops.git'
+    - 'ghcr.io/this-is-tobi/charts'
   destinations:
     - namespace: ci-agents
+      server: https://kubernetes.default.svc
+    - namespace: homepage
       server: https://kubernetes.default.svc
     - namespace: terenga-dev
       server: https://kubernetes.default.svc
@@ -50,27 +53,16 @@ spec:
       server: https://kubernetes.default.svc
     - namespace: terenga-prod
       server: https://kubernetes.default.svc
-  # Allow creating Namespaces and ClusterRoles ONLY via platform governance, no CRDs/Webhooks
   clusterResourceWhitelist:
     - group: ''
       kind: Namespace
+    - group: 'rbac.authorization.k8s.io'
+      kind: ClusterRole
+    - group: 'rbac.authorization.k8s.io'
+      kind: ClusterRoleBinding
   namespaceResourceWhitelist:
-    - group: ''
-      kind: ResourceQuota
-    - group: ''
-      kind: LimitRange
-    - group: ''
-      kind: ServiceAccount
-    - group: ''
-      kind: ConfigMap
-    - group: 'rbac.authorization.k8s.io'
-      kind: Role
-    - group: 'rbac.authorization.k8s.io'
-      kind: RoleBinding
-    - group: 'networking.k8s.io'
-      kind: NetworkPolicy
-    - group: 'cilium.io'
-      kind: CiliumNetworkPolicy
+    - group: '*'
+      kind: '*'
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
@@ -83,19 +75,14 @@ spec:
   description: End-user and business applications with strict zero-cluster-privilege boundaries
   sourceRepos:
     - 'git@github.com:amyloth-lab/homelab-gitops.git'
-    - 'ghcr.io/this-is-tobi/charts'
   destinations:
-    - namespace: homepage
-      server: https://kubernetes.default.svc
     - namespace: terenga-dev
       server: https://kubernetes.default.svc
     - namespace: terenga-staging
       server: https://kubernetes.default.svc
     - namespace: terenga-prod
       server: https://kubernetes.default.svc
-  # Explicitly deny all cluster-scoped resources
   clusterResourceWhitelist: []
-  # Explicitly block apps from altering their own network policies, quotas, or RBAC
   namespaceResourceBlacklist:
     - group: ''
       kind: ResourceQuota

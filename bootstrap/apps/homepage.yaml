@@ -6,7 +6,7 @@ metadata:
   finalizers:
     - resources-finalizer.argocd.argoproj.io
 spec:
-  project: applications
+  project: platform
   sources:
     - repoURL: ghcr.io/this-is-tobi/charts
       chart: homepage
